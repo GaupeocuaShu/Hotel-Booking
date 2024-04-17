@@ -1,0 +1,193 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_FrontendProfileLayout.cshtml";
+    int count = 2;
+}
+
+<div class="main-content" style="min-height: 636px;">
+    <section class="section">
+        <div class="section-header">
+            <h1>Booked Room</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item active"><a href="#">BookedRoom</a></div>
+                <div class="breadcrumb-item">BookedRoomDetail</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <div class="invoice">
+                <div class="invoice-print">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="invoice-title">
+                                <h2>Booked Room Details</h2>
+                                <div class="invoice-number">Booked ID #12345</div>
+                            </div>
+                            <hr style=" border: 1px solid #5542426e; " />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @if (Model.customer != null)
+                                    {
+                                        <address>
+                                            <strong>Customer Information:</strong><br>
+                                            <b> Name:&emsp;</b> @Model.customer.CustomerName<br>
+                                            <b> ID:&emsp;</b>@Model.customer.ID<br>
+                                            <b> Date Of Birth:&emsp;</b>@Model.customer.DateOfBirth.ToString("MM-dd-yyy")<br>
+                                            <b> Phone Number:&emsp;</b>@Model.customer.PhoneNumber<br>
+                                            <b> Address:&emsp;</b> @Model.customer.CustomerAddress<br>
+                                        </address>
+                                    }
+                                    else
+                                    {
+                                        <address>
+                                            <strong>Customer Information:</strong><br>
+                                            <b> Name:&emsp;</b>________ <br>
+                                            <b> ID:&emsp;</b>________<br>
+                                            <b> Date Of Birth:&emsp;</b>________<br>
+                                            <b> Phone Number:&emsp;</b>________<br>
+                                            <b> Address:&emsp;</b>________<br>
+                                        </address>
+                                    }
+                                </div>
+                                <div class="col-md-6 text-md-right">
+                                    <address>
+                                        <strong>User Information</strong><br>
+                                        @Model.user.UserName |<b>&emsp;Name</b> <br />
+                                        @Model.user.PhoneNumber | <b>&emsp;Phone Number</b> <br />
+                                        @Model.user.Email | <b>&emsp;Email</b><br />
+
+                                    </address>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <address>
+                                        <strong>Booking Information:</strong><br>
+                                        <b> Booked-Room ID:&emsp;</b> @Model.bookedRoom.ID<br>
+                                        <b> Book-in Day:&emsp;</b> @Model.bookedRoom.BookDate.ToString("MM-dd-yyy")<br>
+                                        <b> Check-in Day:&emsp;</b>@Model.bookedRoom.CheckinDay.ToString("MM-dd-yyy")<br>
+                                        <b> Check-out Day:&emsp;</b>@Model.bookedRoom.CheckoutDay.ToString("MM-dd-yyy")<br>
+                                        <b> Check-in Status:&emsp;</b>
+                                        @if (Model.bookedRoom.CheckinStatus)
+                                        {<span class="badge bg-success">Checked in</span>}
+                                        else
+                                        { <span class="badge bg-warning">Not Check in</span>}
+                                        <br />  <br />
+                                        <b> Payment Status:&emsp;</b>
+                                        @if (Model.bookedRoom.PaymentStatus)
+                                        {<span class="badge bg-success">Paid</span>}
+                                        else
+                                        { <span class="badge bg-warning">Not Paid</span>}
+                                        <br />  <br />
+                                        <b> Booking Status:&emsp;</b>
+                                        @if (Model.bookedRoom.BookingStatus == "Success")
+                                        {<span class="badge bg-success">Success</span>}
+                                        else if (Model.bookedRoom.BookingStatus == "Cancelled")
+                                        { <span class="badge bg-warning">cancelled</span>}
+                                        else
+                                        { <span class="badge bg-danger">Required To Cancel</span>}
+
+                                    </address>
+                                </div>
+                                <div class="col-md-6 text-md-right">
+                                    <address>
+                                        <strong>Room Information</strong><br>
+                                        @Model.room.RoomName |<b>&emsp;Room Name</b> <br />
+                                        @Model.room.RoomType.RoomTypeName |<b>&emsp;Room Type</b> <br />
+                                        $@Model.room.RoomType.Price.ToString("G26") |<b>&emsp;Room Price</b> <br />
+
+                                    </address>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="section-title">Bill Summary</div>
+                            <p class="section-lead">All service here cannot be deleted.</p>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-md">
+                                    <tbody>
+                                        <tr>
+                                            <th data-width="40" style="width: 40px;">#</th>
+                                            <th>Name</th>
+                                            <th>Total Day Use</th>
+                                            <th>Price</th>
+                                            <th>Total</th>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td><strong>Room:</strong>&emsp; @Model.room.RoomName - @Model.room.RoomType.RoomTypeName</td>
+                                            <td>@Model.invoice.TotalBookedDay</td>
+                                            <td>$@Model.room.RoomType.Price.ToString("G26")</td>
+                                            <td>$@((Model.invoice.TotalBookedDay*Model.room.RoomType.Price).ToString("G26"))</td>
+
+                                        </tr>
+                                        @foreach (var service in Model.services)
+                                        {
+                                            <tr>
+                                                <td>@count</td>
+                                                <td><strong>Service: </strong>&emsp;@service.HotelService.ServiceName</td>
+                                                <td>---  ---  ---</td>
+                                                <td>$@service.HotelService.Price.ToString("G26")</td>
+                                                <td>$@service.HotelService.Price.ToString("G26")</td>
+                                            </tr>
+                                            count++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <hr style=" border: 1px solid #5542426e; " />
+
+                            <div class="row mt-4">
+                                <div class="col-lg-8">
+                                    <div class="section-title">Payment Method</div>
+                                    <p class="section-lead">The payment method that we provide is to make it easier for you to pay invoices.</p>
+                                    <div class="images">
+                                        <img src="~/assets/img/visa.png" alt="visa">
+                                        <img src="assets/img/jcb.png" alt="jcb">
+                                        <img src="assets/img/mastercard.png" alt="mastercard">
+                                        <img src="assets/img/paypal.png" alt="paypal">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 text-right">
+
+                                    <div class="invoice-detail-item">
+                                        <div class="invoice-detail-name">Total</div>
+                                        <div class="invoice-detail-value invoice-detail-value-lg">$@Model.invoice.TotalPrice.ToString("G26")</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-md-right">
+                    <div class="float-lg-left mb-lg-0 mb-3">
+                        <button class="btn btn-primary btn-icon icon-left"><i class="fas fa-credit-card"></i> Process Payment</button>
+                        <a href="/Frontend_63132986/FrontendBookedRoom" class="btn btn-danger btn-icon icon-left"><i class="bi bi-escape"></i> Back</a>
+                    </div>
+
+                    <button class="btn invoice-btn  btn-warning btn-icon icon-left"><i class="bi bi-receipt-cutoff"></i> Invoice</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section scripts{
+    <script>
+        $("document").ready(function () {
+            $(".invoice-btn").on("click", function () {
+                const html = $("body").html();
+                const invoicePrint = $(".invoice-print").html();
+                $("body").html(invoicePrint);
+                window.print();
+                $('body').html(html);
+            })
+        })
+    </script>
+}
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7a71d1ba3f9447d6871a8f62819b7721" Name="Diagram1">
+        <EntityTypeShape EntityType="Project_63132986Model.Customer" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Project_63132986Model.Employee" Width="1.5" PointX="8" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Project_63132986Model.HotelService" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Project_63132986Model.Position" Width="1.5" PointX="5.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Project_63132986Model.Room" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Project_63132986Model.RoomImageGallery" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Project_63132986Model.RoomType" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Project_63132986Model.ServiceImage" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Project_63132986Model.UserInfo" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
+        <AssociationConnector Association="Project_63132986Model.FK__Employee__Positi__05D8E0BE" ManuallyRouted="false" />
+        <AssociationConnector Association="Project_63132986Model.FK__ServiceIm__Servi__47A6A41B" ManuallyRouted="false" />
+        <AssociationConnector Association="Project_63132986Model.FK__Room__RoomTypeID__3F115E1A" ManuallyRouted="false" />
+        <AssociationConnector Association="Project_63132986Model.FK__RoomImage__RoomI__42E1EEFE" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Project_63132986Model.BookedRoom" Width="1.5" PointX="10.75" PointY="3.625" />
+        <AssociationConnector Association="Project_63132986Model.FK__BookedRoo__Custo__7755B73D" />
+        <AssociationConnector Association="Project_63132986Model.FK__BookedRoo__RoomI__756D6ECB" />
+        <AssociationConnector Association="Project_63132986Model.FK__BookedRoo__UserI__76619304" />
+        <EntityTypeShape EntityType="Project_63132986Model.ServiceUsage" Width="1.5" PointX="5.375" PointY="8.75" />
+        <AssociationConnector Association="Project_63132986Model.FK__ServiceUs__Booke__0B5CAFEA" />
+        <AssociationConnector Association="Project_63132986Model.FK__ServiceUs__Servi__0C50D423" />
+        <EntityTypeShape EntityType="Project_63132986Model.Invoice" Width="1.5" PointX="13" PointY="4.5" />
+        <AssociationConnector Association="Project_63132986Model.FK__Invoice__BookedR__1B9317B3" />
+        <EntityTypeShape EntityType="Project_63132986Model.SliderBannerImage" Width="1.5" PointX="7.375" PointY="8.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

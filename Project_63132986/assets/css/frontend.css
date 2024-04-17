@@ -1,0 +1,710 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Playfair Display', serif;
+}
+
+:root { /* cung cấp phạm vi truy cập */
+    --transition: all 0.7s ease; /* -- khai báo biến */
+    --yellow: #efa73c;
+    --dark: #292826;
+}
+
+html {
+    scroll-behavior: smooth;
+    height: 100%;
+}
+body {
+    line-height: 1.6;
+    height: 100%;
+    position: relative;
+}
+
+.booked_room {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    display: none;
+    background-color: #F9F9F9;
+    overflow: scroll;
+    left:0;
+    top:1px;
+}
+.subscribe {
+    position: relative;
+    height: 100%;
+    width: 97%;
+    padding: 20px;
+    background-color: #F9F9F9;
+    border-radius: 4px;
+    color: #333;
+    
+}
+
+
+    .subscribe p {
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        line-height: 28px;
+    }
+
+
+
+    .subscribe .submit-btn {
+        position: absolute;
+        border-radius: 30px;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+        background-color: #0f0092;
+        color: #FFF;
+        padding: 12px 25px;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 5px;
+        right: -10px;
+        bottom: -18px;
+        cursor: pointer;
+        transition: all .25s ease;
+        box-shadow: -5px 6px 20px 0px rgba(26, 26, 26, 0.4);
+    }
+
+        .subscribe .submit-btn:hover {
+            background-color: #07013d;
+            box-shadow: -5px 6px 20px 0px rgba(88, 88, 88, 0.569);
+        }
+    .subscribe .cancel-btn {
+        position: absolute;
+        border-radius: 30px;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+        background-color: #c42929;
+        color: #FFF;
+        padding: 12px 25px;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 5px;
+        right: -10px;
+        top: 0;
+        cursor: pointer;
+        transition: all .25s ease;
+        box-shadow: -5px 6px 20px 0px rgba(26, 26, 26, 0.4);
+        font-size:15px;
+    }
+
+        .subscribe .cancel-btn:hover {
+            background-color: #a71616;
+            box-shadow: -5px 6px 20px 0px rgba(88, 88, 88, 0.569);
+        }
+
+.btn {
+    display: block;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    width: 140px;
+    margin: 15px auto;
+    cursor: pointer;
+    transition: var(--transition); /* sử dụng lại biến đã được khai báo trên root */
+}
+
+    .btn:hover {
+        opacity: 0.85;
+    }
+
+.flex {
+    display: flex !important;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 8px 0;
+}
+
+img {
+    width: 100%;
+    display: block;
+}
+
+@media(max-width: 500px) {
+    body {
+        font-size: 14px;
+    }
+}
+/* header */
+
+.header {
+    position: relative;
+    min-height: 100vh;
+    color: white;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-content: stretch;
+}
+.header_top {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    padding: 25px;
+}
+
+    .header_top span {
+        cursor: pointer;
+        letter-spacing: 2px;
+        transition: var(--transition);
+    }
+
+        .header_top span:hover {
+            color: var(--yellow);
+        }
+
+.header_bottom {
+    text-align: center;
+    margin: 0 auto;
+}
+
+    .header_bottom h2 {
+        padding: 22px 0;
+        font-size: 45px;
+        border-bottom: 1px solid white;
+    }
+
+    .header_bottom p {
+        opacity: 0.7;
+        font-size: 20px;
+        margin: 45px auto;
+        width: 60vw;
+    }
+
+.head_btn {
+    margin: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
+    border: 3px solid white;
+    padding: 13px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+    .head_btn:hover {
+        background: transparent;
+    }
+
+@media(max-width: 500px) {
+    .head_btn {
+        font-size: 17px;
+    }
+
+    .header_bottom h2 {
+        font-size: 28px;
+    }
+
+    .header_bottom p {
+        font-size: 17px;
+        margin: 20px auto;
+    }
+}
+.swiper {
+    width: 100%;
+    height: 98%;
+}
+
+/* side navbar */
+.sidenav {
+    color: white;
+    background: var(--dark);
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    right: -100%;
+    padding: 20px;
+    width: 300px;
+    transition: var(--transition);
+    z-index: 10; /* phần tử xếp chồng lên nhau */
+}
+    /*====================================================*/
+    .sidenav.show {
+        right: 0;
+    }
+/*====================================================*/
+.cancel_btn {
+    cursor: pointer;
+    right: 25px;
+    position: absolute;
+    font-size: 22px;
+    transition: var(--transition);
+}
+
+    .cancel_btn:hover {
+        opacity: 0.7;
+    }
+
+.mynavbar {
+    list-style: none;
+    margin-top: 50px;
+    padding: 12px;
+}
+
+    .mynavbar li a {
+        text-decoration: none;
+        text-transform: capitalize;
+        color: white;
+        padding: 15px 0;
+        display: block;
+        opacity: 0.8;
+        letter-spacing: 1.5px;
+        border-bottom: rgba(249, 211, 66, 0.3);
+        transition: var(--transition);
+    }
+
+        .mynavbar li a:hover {
+            padding-left: 12px;
+        }
+
+.sign_up, .log_in {
+    color: white;
+    background: var(--yellow);
+}
+
+@media(max-width: 400px) {
+    .sidenav {
+        width: 100vw;
+    }
+}
+
+/*------- Title -------*/
+.title {
+    text-transform: uppercase;
+    font-size: 30px;
+    border-bottom: 5px solid var(--dark);
+    letter-spacing: 3px;
+    color: var(--yellow);
+    width: 235px;
+    margin: 15px 0;
+}
+
+.sec-width {
+    width: 85vw;
+    margin: 0 auto !important; /* đặt phần tử ở giữa và canh giữa theo chiều ngang */
+}
+
+/*------- service -------*/
+.services {
+    margin: 40px 0;
+}
+
+.service {
+    display: flex;
+    margin: 30px 0;
+}
+
+.service_icons {
+    flex: 6.5%;
+    align-self: flex-start; /* điều chỉnh vị trí dọc theo trục chứa của phần tử con */
+    font-size: 48px;
+    color: #252525;
+}
+
+.service_content {
+    padding-left: 20px;
+}
+
+    .service_content h2 {
+        opacity: 0.7;
+    }
+
+    .service_content button {
+        margin-left: 0px;
+        margin-right: 0px;
+        color: white;
+        background: var(--yellow);
+    }
+
+@media(min-width: 992px) {
+    .services_container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-column-gap: 35px;
+    }
+}
+
+/*------- Booking forms -------*/
+.reservation {
+    background: linear-gradient(rgba(42, 42, 42, 0.85), rgba(0, 0, 0, 0.85)), url(pictures/home-img-3.jpg) center/cover no-repeat;
+    color: white;
+    padding: 40px 200px;
+}
+
+.reservation_form {
+    display: grid;
+}
+
+.form_item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.reservation_form input[type = "submit"] {
+    margin: 25px 0 0 0;
+    background: var(--dark);
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+    .reservation_form input[type = "submit"]:hover {
+        background-color: #efa73c;
+        color: #252525;
+    }
+
+.reservation_form label, .reservation_form input {
+    width: 100%;
+    height: 40px;
+}
+
+.reservation_form label {
+    font-weight: 600;
+    word-spacing: 5px;
+    padding-bottom: 8px;
+}
+
+.reservation_form input:not(.btn) {
+    margin: 4px 0 16px 0;
+    padding: 12px 15px;
+    border-radius: 5px;
+    font-size: 17px;
+    border: none;
+}
+
+.reservation_form input:focus {
+    outline: 0;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
+}
+
+@media(min-width: 768px) {
+    .reservation_form {
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 24px;
+    }
+}
+
+@media(min-width: 1170px) {
+    .reservation_form {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media(min-width: 1370px) {
+    .reservation_form {
+        grid-template-columns: 2fr 2fr 1fr 1fr 1fr 2fr;
+    }
+
+    .reservation {
+        height: 40vh;
+        display: grid;
+    }
+}
+
+@media(max-width: 500px) {
+    .reservation {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+/*------- rooms -------*/
+.room_text {
+    padding: 5px 20px;
+}
+
+    .room_text h3 {
+        font-size: 26px;
+    }
+
+    .room_text ul {
+        list-style-type: none;
+        margin: 15px 0;
+    }
+
+        .room_text ul li {
+            padding: 7px 0;
+        }
+
+            .room_text ul li i {
+                color: var(--yellow);
+                margin-right: 10px;
+            }
+
+.rating {
+    opacity: 0.8;
+}
+
+    .rating span {
+        font-size: 40px;
+        font-weight: 900;
+        color: var(--yellow);
+    }
+
+.room_image img {
+    object-fit: cover;
+}
+
+.room_image:hover img {
+    transform: scale(1.1);
+}
+
+.room_image img {
+    transition: var(--transition);
+}
+
+.swiper_text {
+    background: var(--dark);
+    color: white;
+}
+
+@media(min-width: 1370px) {
+    .room {
+        display: flex;
+        margin: 10px 0;
+    }
+
+        .room:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+}
+
+@media(max-width: 768px) {
+    .room {
+        display: flex;
+        flex-direction: column;
+        margin: 10px 0;
+    }
+}
+
+.btn:hover {
+    background-color: var(--yellow);
+}
+/*------- customer -------*/
+
+.customers { /* set background cho phần customer review */
+    margin-top: 40px;
+    padding: 40px 0;
+    background: ;
+}
+
+.customer {
+    background: #fff;
+    padding: 35px;
+    text-align: center;
+    margin: 24px 0;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.75);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.rate {
+    margin: 10px 0;
+    color: var(--yellow);
+}
+
+.customer h3 {
+    font-size: 25px;
+}
+
+.customer p {
+    opacity: 0.7;
+    line-height: 1.8;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.customer img {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    margin: 25px auto;
+}
+
+.customer span {
+    font-weight: 700;
+    opacity: 0.7;
+}
+
+.customer:hover {
+    transform: translateY(-18px); /* ảnh di chuyển từ dưới lên theo trục Y */
+}
+
+@media(min-width: 992px) {
+    .customer_container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 30px;
+    }
+}
+
+@media(min-width: 1370px) {
+    .customer_container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* chia thành 3 phần */
+    }
+}
+
+@media(max-width: 500px) {
+    .customer p {
+        width: 100%;
+    }
+
+    .customer img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/*-------- footer -------*/
+
+.footer {
+    background: var(--dark);
+    color: #fff;
+    text-align: center;
+}
+
+.footer_container {
+    width: 85vw;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+    .footer_container p, .footer_container a, .footer_container span {
+        opacity: 0.8;
+    }
+
+.footer a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+}
+
+.social_app {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+}
+
+    .social_app li {
+        margin: 0 10px;
+        width: 50px;
+        height: 50px;
+        background: #2e2e2e;
+        border-radius: 50%;
+        transition: var(--transition);
+        cursor: pointer;
+    }
+
+    .social_app i {
+        font-size: 25px;
+        margin-top: 15px;
+        margin-left: 15px;
+    }
+
+    .social_app li:hover {
+        background: #fff;
+        color: #2e2e2e;
+    }
+
+.contact_item span {
+    display: block;
+}
+
+@media(min-width: 900px) {
+    .footer_container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
+    }
+}
+
+@media(min-width: 1170px) {
+    .footer {
+        text-align: left;
+    }
+
+    .footer_container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+        .footer_container div:nth-child(1) p {
+            padding-right: 20px;
+        }
+
+    .contact_item {
+        display: grid;
+        grid-template-columns: 10% 90%;
+        margin-bottom: 15px;
+        align-items: center;
+    }
+}
+
+.showModal {
+    position: fixed;
+    background: transparent;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+}
+
+.avatar{
+   position:relative;
+}
+.avatar:hover .info {
+    display:block;
+
+}
+.info {
+    display: none;
+    width: 204px;
+    height: 100px;
+    background-color: #4d4a4a;
+    position: absolute;
+    content: "";
+    top: 20px;
+    left: -80px;
+    border-radius: 10px;
+    padding:10px;
+
+}
+
+.text-error{
+    color:red;
+}
+
+
+.room_alert_success{
+    color:forestgreen;
+}
+.room_alert_danger {
+    color:red;
+}

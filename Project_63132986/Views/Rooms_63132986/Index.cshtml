@@ -1,0 +1,155 @@
+﻿@model IEnumerable<Project_63132986.Models.Room>
+
+@{
+    ViewBag.Title = "Rooms";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Rooms</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Forms</a></div>
+                <div class="breadcrumb-item">Rooms</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Room List</h2>
+            <p class="section-lead">We provide advanced input fields, such as date picker, color picker, and so on.</p>
+
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <a href="/Rooms_63132986/Create" class="text-white btn btn-info my-3">Create</a>
+                            <table id="userTable" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Room Name</th>
+                                        <th>Room Type</th>
+                                        <th>Available</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts{
+
+    <script>
+
+        $(document).ready(function () {
+
+            //Ajust room status 
+
+            $("body").on("change", ".change-status", function () {
+                const id = $(this).data("id");
+                $.ajax({
+                    method: "POST",
+                    url: "/Rooms_63132986/ChangeStatus/" + id,
+                    dataType: "JSON",
+                    success: (data) => {
+                        if (data.status == "success") {
+                            $.notify("Change Status Successfully", "success");
+                        }
+                        else {
+                            $.notify("Change Status Unsuccessfully", "error");
+                        }
+                    },
+                });
+
+            })
+            
+            //Get room list by ajax 
+
+            $("#userTable").DataTable({
+                "ajax": {
+                    "url": "/Rooms_63132986/GetList",
+                    "type": "GET",
+                    "data": "json"
+                },
+                "columns": [
+                    { "data": "ID" },
+                    { "data": "RoomName" },
+                    { "data": "RoomType" },
+                    {   
+                        "data": "RoomStatus", "class": "form-group", "render": function (data,type,row,meta) {
+                            if (data == true)
+                                return `
+                                <div class="form-group">
+                                       <label class="custom-switch mt-2">
+                                          <input data-id = ${row['ID']} checked type="checkbox" name="custom-switch-checkbox" class="change-status custom-switch-input">
+                                          <span class="custom-switch-indicator"></span>
+                                       </label>
+                                </div>`
+                            else
+                                return`   
+                                <div class="form-group">    
+                                       <label class="custom-switch mt-2">
+                                          <input data-id = ${row['ID']} type="checkbox" name="custom-switch-checkbox" class="change-status custom-switch-input">
+                                          <span class="custom-switch-indicator"></span>
+                                       </label>
+                                </div>`
+                        }
+                    },
+                    {
+                        "data": "ID", "class": "actionBtn text-center", "render": function (data) {
+                            return "<a href ='/RoomImageGalleries_63132986/Index/" + data + "' class ='btn-update btn btn-info '><i class='bi bi-image-fill'></i></a><a href ='/Rooms_63132986/Edit/"+data+"' class ='btn-update btn btn-primary mx-2'><i class='bi bi-pencil-square'></i></a><button data-id = '" + data + "' class = 'btn-delete btn btn-danger'><i class='bi bi-trash-fill'></i></button>";
+
+                        },
+                        "orderable": false,
+                        "width": "200px",
+                    }
+                ]
+            })
+        })
+
+
+        // Delete room by ajax 
+        $("body").on("click",".btn-delete", function () {
+            const id = $(this).data("id");
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        method: "POST",
+                        url: "/Rooms_63132986/Delete/" + id,
+                        dataType: "JSON",
+                        success: (data) => {
+
+                            console.log($(this).parents("tr"));
+                            $(this).parents("tr").hide();
+                        },
+                    });
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+
+                }
+            });
+
+
+        })
+    </script>
+}

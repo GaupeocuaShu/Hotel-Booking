@@ -1,0 +1,60 @@
+﻿@model Project_63132986.Models.RoomType
+
+@{
+    ViewBag.Title = "RoomTypes";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Room Types</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-itemactive"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Forms</a></div>
+                <div class="breadcrumb-item">Room Types</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Edit Room Types</h2>
+            <p class="section-lead">We provideadvanced input fields, suchas date picker, color picker,and so on.</p>
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Input Text</h4>
+                        </div>
+                        <div class="card-body">
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                @*Name*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.RoomTypeName)
+                                    @Html.EditorFor(model => model.RoomTypeName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.RoomTypeName, "", new { @class = "text-danger" })
+                                </div>
+                                @*Price*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Price)
+                                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                                </div>
+                                <div>
+                                    <a href="/RoomTypes_63132986/Index" style="width:70px" class="text-white btn btn-danger"><i class="bi bi-escape"></i></a>
+                                    &emsp;<button class="btn btn-primary" style="width:70px"><i class="bi bi-check2-circle"></i></button>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+

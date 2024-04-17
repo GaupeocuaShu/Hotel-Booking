@@ -1,0 +1,77 @@
+﻿@model Project_63132986.Models.Room
+
+@{
+    ViewBag.Title = "Rooms";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Rooms</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Forms</a></div>
+                <div class="breadcrumb-item">Rooms</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Add Room</h2>
+            <p class="section-lead">We provide advanced input fields, such as date picker, color picker, and so on.</p>
+
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Input Text</h4>
+                        </div>
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="card-body">
+                                @*Name*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.RoomName)
+                                    @Html.EditorFor(model => model.RoomName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.RoomName, "", new { @class = "text-danger" })
+                                </div>
+                                @*Room Features*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.RoomFeature)
+                                    <textarea name="RoomFeature" id="feature" class="form-control"></textarea>
+                                    @Html.ValidationMessageFor(model => model.RoomFeature, "", new { @class = "text-danger" })
+                                </div>
+                                @*Room Description*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.RoomDescription)
+                                    <textarea name="RoomDescription" id="description" class="form-control"></textarea>
+                                    @Html.ValidationMessageFor(model => model.RoomDescription, "", new { @class = "text-danger" })
+                                </div>
+                                @*Room Type*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.RoomTypeID, "RoomTypeID", htmlAttributes: new { @class = "control-label" })
+                                    @Html.DropDownList("RoomTypeID", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RoomTypeID, "", new { @class = "text-danger" })
+                                </div>
+                                @*Room Status Hidden*@
+                                <div class="form-group">
+                                    <input type="hidden" name="RoomStatus" value="true" />
+                                </div>
+                                <div>
+                                    <a href="/Rooms_63132986/Index" style="width:70px" class="text-white btn btn-danger"><i class="bi bi-escape"></i></a>
+                                    &emsp;<button class="btn btn-primary">Create</button>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+

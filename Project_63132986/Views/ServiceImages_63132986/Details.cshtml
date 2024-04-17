@@ -1,0 +1,35 @@
+﻿@model Project_63132986.Models.ServiceImage
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ServiceImage</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceImage1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceImage1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HotelService.ServiceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HotelService.ServiceName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

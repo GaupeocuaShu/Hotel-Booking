@@ -1,0 +1,127 @@
+﻿@model Project_63132986.Models.Employee
+
+@{
+    ViewBag.Title = "Employees";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Employees</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-itemactive"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Forms</a></div>
+                <div class="breadcrumb-item">Employees</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Edit Employee</h2>
+            <p class="section-lead">We provideadvanced input fields, suchas date picker, color picker,and so on.</p>
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Input Text</h4>
+                        </div>
+                        <div class="card-body">
+                            @using (Html.BeginForm("Edit", "Employees_63132986", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                @*Name*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.EmployeeName)
+                                    @Html.EditorFor(model => model.EmployeeName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
+                                </div>
+                                @*DOB*@
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DateOfBirth)
+
+                            <input value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" name="DateOfBirth" type="text" class="datepicker form-control" />
+                            @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+                        </div>
+                                @*Phone Number*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-phone"></i>
+                                            </div>
+                                        </div>
+                                        @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "phone-number form-control" } })
+                                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                @*Sex*@
+                                <div class="form-group">
+                                    <label>Sex</label>
+                                    <select name="Sex" class="form-control">
+                                        @{
+                                            if (Model.Sex == true)
+                                            {
+                                                <option value="true" selected>Male</option>
+                                                <option value="false">Female</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="true" >Male</option>
+                                                <option value="false" selected>Female</option>
+                                            }
+                                        }
+
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.Sex, "", new { @class = "text-danger" })
+                                </div>
+                                @*Email*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Email)
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                                @*Address*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.EmployeeAddress, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.EmployeeAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.EmployeeAddress, "", new { @class = "text-danger" })
+
+                                </div>
+                                @*Position*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PositionID, "PositionID", htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.DropDownList("PositionID", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.PositionID, "", new { @class = "text-danger" })
+
+                                </div>
+                                <div class="form-group">
+
+                                </div>
+                                @*Avatar*@
+                                <div class="form-group">
+                                    <label>Avatar</label><br />
+                                    <img class="rounded-3" width="300" src="~/assets/images/@Html.DisplayFor(model => model.Avatar)" />
+                                    <br />      <br />
+                                    <input value="empty" name="Avatar" type="file" class="form-control">
+                                </div>
+                                <div>
+                                    <a href="/Employees_63132986/Index" style="width:70px" class="text-white btn btn-danger"><i class="bi bi-escape"></i></a>
+                                    &emsp;<button class="btn btn-primary" style="width:70px"><i class="bi bi-check2-circle"></i></button>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+

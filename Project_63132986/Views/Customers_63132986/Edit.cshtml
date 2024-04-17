@@ -1,0 +1,110 @@
+﻿@model Project_63132986.Models.Customer
+
+@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Customers</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-itemactive"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Forms</a></div>
+                <div class="breadcrumb-item">Customers</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Edit Customers</h2>
+            <p class="section-lead">We provideadvanced input fields, suchas date picker, color picker,and so on.</p>
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Input Text</h4>
+                        </div>
+                        @using (Html.BeginForm("Edit", "Customers_63132986", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="card-body">
+                                @*ID*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ID)
+                                    @Html.EditorFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+                                </div>
+                                @*Name*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CustomerName)
+                                    @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+                                </div>
+                                @*DOB*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.DateOfBirth)
+                                    <input value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" name="DateOfBirth" type="text" class="datepicker form-control" />
+                                    @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+                                </div>
+                                @*Phone Number*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label" })
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="fas fa-phone"></i>
+                                            </div>
+                                        </div>
+                                        @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "phone-number form-control" } })
+                                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                @*Sex*@
+                                <div class="form-group">
+                                    <label>Sex</label>
+                                    <select name="Sex" class="form-control">
+                                        @{
+                                            if (Model.Sex == true)
+                                            {
+                                                <option value="true" selected>Male</option>
+                                                <option value="false">Female</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="true">Male</option>
+                                                <option value="false" selected>Female</option>
+                                            }
+                                        }
+
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.Sex, "", new { @class = "text-danger" })
+                                </div>
+
+                                @*Address*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CustomerAddress, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.CustomerAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CustomerAddress, "", new { @class = "text-danger" })
+
+                                </div>
+                                <div>
+                                    <a href="/Customers_63132986/Index" style="width:70px" class="text-white btn btn-danger"><i class="bi bi-escape"></i></a>
+                                    &emsp;<button class="btn btn-primary">Update</button>
+
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+</div>
+

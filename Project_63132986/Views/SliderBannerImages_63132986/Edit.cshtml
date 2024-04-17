@@ -1,0 +1,80 @@
+﻿@model Project_63132986.Models.SliderBannerImage
+
+@{
+    ViewBag.Title = "SliderBanners";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Slider Banner Images</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-itemactive"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Forms</a></div>
+                <div class="breadcrumb-item">Slider Banner Images</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Edit Slider Banner Image</h2>
+            <p class="section-lead">We provideadvanced input fields, suchas date picker, color picker,and so on.</p>
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Input Text</h4>
+                        </div>
+                        @using (Html.BeginForm("Edit", "SliderBannerImages_63132986", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="card-body">
+                                <input type="hidden" name="ID" value="@Model.ID" />
+                                <div class="form-group">
+                                    <img class="rounded" src="~/assets/images/@Model.BannerImage" width="250px" /><br /><br />
+                                    <label>Banner Image</label>
+                                    <input name="Image" type="file" class="form-control">
+                                </div>
+
+                                @*Title*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Title)
+                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                </div>
+                                @*Content*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Content)
+                                    @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                                </div>
+                                @*Link*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Link)
+                                    @Html.EditorFor(model => model.Link, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Link, "", new { @class = "text-danger" })
+                                </div>
+                                @*Order*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ImageOrder)
+                                    @Html.EditorFor(model => model.ImageOrder, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ImageOrder, "", new { @class = "text-danger" })
+                                </div>
+                                <div>
+                                    <a href="/SliderBannerImages_63132986/Index" style="width:70px" class="text-white btn btn-danger"><i class="bi bi-escape"></i></a>
+                                    &emsp;<button class="btn btn-primary">Update</button>
+
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+</div>

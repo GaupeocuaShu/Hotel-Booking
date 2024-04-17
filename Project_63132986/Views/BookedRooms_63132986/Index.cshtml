@@ -1,0 +1,326 @@
+﻿@model IEnumerable<Project_63132986.Models.BookedRoom>
+
+@{
+    ViewBag.Title = "BookedRooms";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Booked Rooms</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Forms</a></div>
+                <div class="breadcrumb-item">Booked Rooms</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Booked Room List</h2>
+            <p class="section-lead">We provide advanced input fields, such as date picker, color picker, and so on.</p>
+
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="/BookedRooms_63132986/CancelRoom" class="btn btn-dark text-white">Canceled Rooms</a>
+                        </div>
+                        <div class="card-body">
+                            <table id="userTable" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Customer ID Number</th>
+                                        <th>User Name</th>
+                                        <th>Room Name</th>
+                                        <th>Check-in Day</th>
+                                        <th>Payment Status</th>
+                                        <th>Check-in Status</th>
+                                        <th>Booking Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+@section scripts{
+
+    <script>
+
+        $(document).ready(function () {
+
+            //Ajust Payment status
+            $("body").on("change", ".payment-status", function () {
+                const id = $(this).data("id");
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You will be responsible for this ",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: "/BookedRooms_63132986/ChangePaymentStatus/" + id,
+                            method: "POST",
+                            dataType: "JSON",
+                            success: function (response) {
+                                if (response.status == "success") {
+                                    Swal.fire({
+                                        title: "Ajusted!",
+                                        text: "Payment status was updated",
+                                        icon: "success"
+                                    });
+                                }
+                            }
+                        })
+                    }
+                });
+            })
+
+            //Ajust Checkin status
+
+            $("body").on("change", ".checkin-status", function () {
+                const id = $(this).data("id");
+                // if non check in
+                if ($(this).val() == "false") {
+                    $.ajax({
+                        url: "/BookedRooms_63132986/ChangeCheckinStatus",
+                        method: "POST",
+                        data: {
+                            id: id,
+                            IsCheckin: false,
+                        },
+                        dataType: "JSON",
+                        success: (response) => {
+                            if (response.status == "success") {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Success",
+                                    text: response.message,
+                                });
+                                // set customer id in customer id column
+                                const customerID = $(".customer-" + id).html().replace(/ /g, '');
+
+                                $(".customer-" + id).html("---  ---  ---");
+                                // Change href in detail button
+                                const href = $(".btn-detail-" + id).attr('href');
+                                const newHref = href.replace(customerID, '---  ---  ---');
+                                $(".btn-detail-" + id).attr('href', newHref);
+                                console.log(newHref);
+                            }
+                        }
+                    })
+                }
+                // if check in
+                else {
+                    Swal.fire({
+                        title: "Enter Customer ID Number",
+                        input: "text",
+                        inputAttributes: {
+                            autocapitalize: "off"
+                        },
+                        showCancelButton: true,
+                        confirmButtonText: "Save",
+                        showLoaderOnConfirm: true,
+                    }).then((result) => {
+                        console.log(result);
+                        if (result.isConfirmed) {
+                            // find customer id number is avalable in customer table or not
+                            $.ajax({
+                                url: "/BookedRooms_63132986/FindCustomerID/" + result.value,
+                                method: "GET",
+                                dataType: "JSON",
+                                async: false,
+                                success: function (response) {
+                                    if (response.status == "success") {
+
+                                        // if customer id is available
+                                        $.ajax({
+                                            url: "/BookedRooms_63132986/ChangeCheckinStatus",
+                                            method: "POST",
+                                            data: {
+                                                id: id,
+                                                customerID: result.value,
+                                                IsCheckin: true,
+                                            },
+                                            dataType: "JSON",
+                                            success: (response) => {
+                                                if (response.status == "success") {
+                                                    Swal.fire({
+                                                        icon: "success",
+                                                        title: "Success",
+                                                        text: response.message,
+                                                    });
+                                                    // unset customer id in customer id column
+                                                    $(".customer-" + id).html(result.value);
+                                                    //Change href in detail button
+                                                    const href = $(".btn-detail-" + id).attr('href');
+                                                    const newHref = href.replace("---  ---  ---", result.value);
+                                                    $(".btn-detail-" + id).attr('href', newHref);
+                                                    console.log(newHref);
+                                                }
+                                            }
+                                        })
+
+                                    }
+
+                                    // if customer id is not available
+                                    else {
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: response.status,
+                                            html: response.message,
+                                            footer: '<a href="/Customers_63132986/Create">Click Here to go to Customer Table</a>'
+                                        });
+
+                                    }
+                                }
+                            })
+
+
+
+                        }
+                    });
+                }
+
+            })
+
+            //Get Booked Room list by ajax
+
+            $("#userTable").DataTable({
+                "ajax": {
+                    "url": "/BookedRooms_63132986/GetList",
+                    "type": "GET",
+                    "data": "json"
+                },
+                "columns": [
+                    { "data": "ID" },
+                    {
+                        "data": "CustomerID", "render": function (data, type, row) {
+                            return `<div class="customer-${row['ID']}"> ${data} </div>`
+                        }
+                    },
+                    { "data": "UserName" },
+                    { "data": "RoomName" },
+                    { "data": "CheckinDay" },
+                    {
+                        "data": "PaymentStatus", "render": function (data, type, row, meta) {
+                            return `
+                                                  <select  data-id=${row['ID']} class="payment-status form-control">
+                                                    <option value='true'  ${data == true ? 'selected' : ''}>Paid</option>
+                                                    <option value='false' ${data == false ? 'selected' : ''}>Not Paid</option>
+                                                  </select>
+                                              `
+                        }
+                    },
+                    {
+                        "data": "CheckinStatus", "class": "checkin", "render": function (data, type, row, meta) {
+                            return `
+                                                  <select  data-id=${row['ID']} class="checkin-status form-control">
+                                                    <option value='true'  ${data == true ? 'selected' : ''}>Checked In</option>
+                                                    <option value='false' ${data == false ? 'selected' : ''}>Not Checked In</option>
+                                                  </select>
+                                              `
+                        }
+                    },
+                    {
+                        "data": "BookingStatus", "render": function (data, type, row, meta) {
+                            if (row["BookingStatus"] == "Pending") {
+                                return `<span class="badge rounded-pill text-bg-danger">Required Cancellation</span>`;
+                            } else {
+                                return `<span class="badge rounded-pill text-bg-success">Success</span>`;
+                            }
+
+                        }
+                    },
+                    {
+                        "data": "ID", "class": "actionBtn text-center", "render": function (data, type, row) {
+                            let deleteButton;
+                            if (row['BookingStatus'] == "Pending") {
+                                deleteButton = `<button data-id= ${data} class='btn-confirm btn btn-danger'>
+                                                <i class="bi bi-check-circle-fill"></i>
+                                            </button>`;
+                            }
+                            else {
+                                deleteButton = `<button data-id = ${data} class = 'btn-confirm btn btn-danger'>
+                                               <i class="bi bi-x-square"></i>
+                                            </button>`;
+                            };
+
+                            return `<a href ='/BookedRooms_63132986/Details?bookedID=${row['ID']}&customerID=${row['CustomerID']}&userID=${row['UserID']}&roomID=${row['RoomID']}'
+
+                                                class ='btn-detail-${data} btn btn-info '>
+                                                <i class='bi bi-three-dots'></i>
+                                            </a>
+                                            <a href ='/Rooms_63132986/Edit/${data}' class ='btn-update btn btn-primary mx-2'>
+                                                <i class='bi bi-pencil-square'></i>
+                                            </a>
+                                            ${deleteButton}`;
+                        },
+                        "orderable": false,
+                        "width": "200px",
+                    },
+
+                ]
+            })
+               // Delete room by ajax
+            $("body").on("click", ".btn-confirm", function () {
+                const id = $(this).data("id");
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You wil be responsible for this ajustment!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, I accept!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            method: "POST",
+                            url: "/BookedRooms_63132986/ConfirmCancelRequest/" + id,
+                            dataType: "JSON",
+                            success: (data) => {
+
+                                console.log($(this).parents("tr"));
+                                $(this).parents("tr").hide();
+                            },
+                        });
+                        Swal.fire({
+                            title: "Canceled!",
+                            html: "This room has been cancel. <br/><a href ='/BookedRooms_63132986/CancelRoom'>Click here to check in cancel rooms</a>",
+                            icon: "success"
+                        });
+
+                    }
+                });
+
+
+            })
+            $("#filter").on('change', function () {
+                var table = $('#userTable').DataTable();
+                table.columns([4, 5]).search($(this).val()).draw();
+            });
+        })
+
+
+
+
+     
+     
+    </script>
+}

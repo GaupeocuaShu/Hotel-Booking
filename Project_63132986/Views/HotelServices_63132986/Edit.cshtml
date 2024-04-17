@@ -1,0 +1,72 @@
+﻿@model Project_63132986.Models.HotelService
+
+@{
+    ViewBag.Title = "Services";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Hotel Service</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-itemactive"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Forms</a></div>
+                <div class="breadcrumb-item">Hotel Service</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Edit Hotel Service</h2>
+            <p class="section-lead">We provideadvanced input fields, suchas date picker, color picker,and so on.</p>
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Input Text</h4>
+                        </div>
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="card-body">
+                                @*Service Icon*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ServiceIcon)
+                                    <div name="ServiceIcon" data-icon="@Model.ServiceIcon" data-rows="5" data-cols="10" data-search="true" data-search-text="@Model.ServiceIcon" role="iconpicker"></div>
+                                    @Html.ValidationMessageFor(model => model.ServiceIcon, "", new { @class = "text-danger" })
+                                </div>
+                                @*Name*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ServiceName)
+                                    @Html.EditorFor(model => model.ServiceName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ServiceName, "", new { @class = "text-danger" })
+                                </div>
+                                @*Price*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Price)
+                                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                                </div>
+                                @*Service Description*@
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ServiceDescription)
+                                    <textarea name="ServiceDescription" id="service" class="form-control">
+                                        @Model.ServiceDescription
+                                    </textarea>
+                                    @Html.ValidationMessageFor(model => model.ServiceDescription, "", new { @class = "text-danger" })
+                                </div>
+                                <div>
+                                    <a href="/HotelServices_63132986/Index" style="width:70px" class="text-white btn btn-danger"><i class="bi bi-escape"></i></a>
+                                    &emsp;<button class="btn btn-primary">Update</button>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,384 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Statistic</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Forms</a></div>
+                <div class="breadcrumb-item">Statistic</div>
+            </div>
+        </div>
+        <div class="section-body">
+            @* Fetch booked room number in one day *@
+            <div class="row">
+                <div class="row">
+                    <div class="form-group col-md-8">
+                        <h5>Amount of booked rooms:</h5>
+                        <input class="booked_room_date date-input form-control" type="date" /><br />
+                    </div>
+                </div>
+                <div class="col-6" style="height:400px">
+                    <h5>Doughnut Chart</h5>
+                    <div class="text-center loading-1">
+                        <i style="font-size:50px" class="fas fa-circle-notch fa-spin"></i>
+                    </div>
+                    <canvas id="doughnutChart" width="400" height="200" aria-label="Hello ARIA World" role="img"></canvas>
+                </div>
+
+                <div class="col-6" style="height:400px">
+                    <h5>Polar Chart</h5>
+                    <div class="text-center loading-1">
+                        <i style="font-size:50px" class="fas fa-circle-notch fa-spin"></i>
+                    </div>
+                    <canvas id="pieChart" width="400" height="200" aria-label="Hello ARIA World" role="img"></canvas>
+                </div>
+            </div>
+            @* Fetch booked room number in day range *@
+            <div class="row" style="margin-top:120px">
+                <hr />
+                <div class="row">
+                    <div class="form-group col-8">
+                        <h5>Amount of booked rooms in days range (from picked day to current day):</h5>
+                        <input class="booked_date_from date-input form-control" type="date" /><br />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h5>Bar Chart</h5>
+                    <div class="text-center loading-2">
+                        <i style="font-size:50px" class="fas fa-circle-notch fa-spin"></i>
+                    </div>
+                    <canvas id="barChart" width="400" height="200" aria-label="Hello ARIA World" role="img"></canvas>
+                </div>
+
+                <div class="col-6">
+                    <h5>Line Chart</h5>
+                    <div class="text-center loading-2">
+                        <i style="font-size:50px" class="fas fa-circle-notch fa-spin"></i>
+                    </div>
+                    <canvas id="lineChart" width="400" height="200" aria-label="Hello ARIA World" role="img"></canvas>
+
+                </div>
+            </div>
+
+            @* Fetch Revenue in day range *@
+            <div class="row" style="margin-top:120px">
+                <hr />
+                <div class="row">
+                    <div class="form-group col-8">
+                        <h5>Revenue in days range (from picked day to current day):</h5>
+                        <input class="revenue_date_from date-input form-control" type="date" /><br />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h5>Bar Chart</h5>
+                    <div class="text-center loading-3">
+                        <i style="font-size:50px" class="fas fa-circle-notch fa-spin"></i>
+                    </div>
+                    <canvas id="barChart2" width="400" height="200" aria-label="Hello ARIA World" role="img"></canvas>
+                </div>
+
+                <div class="col-6">
+                    <h5>Line Chart</h5>
+                    <div class="text-center loading-3">
+                        <i style="font-size:50px" class="fas fa-circle-notch fa-spin"></i>
+                    </div>
+                    <canvas id="lineChart2" width="400" height="200" aria-label="Hello ARIA World" role="img"></canvas>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </section>
+</div>
+
+
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        @* ------------------------------------- Statistic helper-------------------------------------*@
+
+        @* Fetch booked room number in one day *@
+
+        function fetchBookedRoomNumber(date) {
+            let pickedDate = new Date(date).toJSON();
+            let doughnutChart = Chart.getChart("doughnutChart");
+            let pieChart = Chart.getChart("pieChart");
+            if (doughnutChart != undefined) {
+                doughnutChart.destroy();
+            } if (pieChart != undefined) {
+                pieChart.destroy();
+            }
+            let rooms = [];
+            $.ajax({
+                url: "/Dashboard_63132986/getBookedRoomsNumber?date=" + pickedDate,
+                method: "GET",
+                type: "JSON",
+                async: false,
+                beforeSend: function () {
+                    $(".loading-1").show();
+                    $(".date-input").prop("disabled", true);
+                },
+                success: function (response) {
+                    $(".loading-1").hide();
+                    $(".date-input").prop("disabled", false);
+
+                    rooms = response.rooms;
+                    let typeName = [];
+                    let typeCount = [];
+                    rooms.forEach((e) => {
+                        typeName.push.apply(typeName, Object.keys(e));
+                        typeCount.push.apply(typeCount, Object.values(e));
+                    })
+                    console.log(typeCount);
+                    // ------------------- Doughnut Chart -------------------
+                    let ctx = document.getElementById("doughnutChart");
+                    let data = {
+                        datasets: [{
+                            data: typeCount,
+                            backgroundColor: [
+                                '#b8d6ed',
+                                '#fecad8',
+                                '#fc9c7b',
+                            ],
+                        }],
+                        labels: typeName,
+                    };
+                    const cfg = {
+                        type: 'doughnut',
+                        data: data,
+                    };
+                    new Chart(ctx, cfg)
+                    // ------------------- Polar Area Chart -------------------
+                    let ctx3 = document.getElementById("pieChart");
+                    let data3 = {
+                        datasets: [{
+                            data: typeCount,
+                            backgroundColor: [
+                                '#b8d6ed',
+                                '#fecad8 ',
+                                '#fc9c7b',
+                            ],
+                            label:"Type"
+                        }],
+                        labels: typeName,
+                        
+                    };
+                    const cfg3 = {
+                        type: 'polarArea',
+                        data: data3,
+                    };
+                     new Chart(ctx3, cfg3)
+                }
+            })
+
+        }
+
+        @* Fetch booked room number in day range *@
+
+        function fetchBookedRoomNumberInDayRange(date) {
+            let currentDate = new Date().toJSON();
+            let barStatus = Chart.getChart("barChart");
+            if (barStatus != undefined) {
+                barStatus.destroy();
+
+            }
+            let lineStatus = Chart.getChart("lineChart");
+            if (lineStatus != undefined) {
+                lineStatus.destroy();
+
+            }
+            let pickDate = new Date(date).toJSON();
+            $.ajax({
+                url: "/Dashboard_63132986/getBookedRoomsNumberInRange?startDate=" + pickDate +"&endDate="+currentDate,
+                method: "GET",
+                dataType: "JSON",
+                beforeSend: function () {
+                    $(".loading-2").show();
+                    $(".date-input").prop("disabled",true);
+                },
+                success: function (response) {
+                    $(".loading-2").hide();
+                    $(".date-input").prop("disabled", false);
+                    console.log(response.data);
+                    const originData = response.data;
+                    let typeName = [];
+                    let typeCount = [];
+                    originData.forEach(function (e) {
+                        typeName.push.apply(typeName, Object.keys(e));
+                        typeCount.push.apply(typeCount, Object.values(e));
+                    })
+
+                    // --------------------Bar chart-------------------------
+                    const ctx1 = document.getElementById("barChart");
+                    const data1 = {
+                        labels: typeName,
+                        datasets: [{
+                            label: 'Booked room amount',
+                            data: typeCount,
+                            hoverOffset: 4,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(255, 159, 64, 0.7)',
+                                'rgba(255, 205, 86, 0.9)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(153, 102, 255, 0.8)',
+                                'rgba(201, 203, 207, 0.9)'
+                            ],
+                        }]
+                    };
+                    const cfg1 = {
+                        type: 'bar',
+                        data: data1,
+                    };
+                    new Chart(ctx1, cfg1)
+                     // --------------------Line chart-------------------------
+                    const ctx2 = document.getElementById("lineChart");
+                    const data2 = {
+                        labels: typeName,
+                        datasets: [{
+                            label: 'Booked room amount',
+                            data: typeCount,
+                            fill: false,
+                            borderColor: 'rgb(75, 192, 192)',
+
+                            tension: 0.1
+                        }]
+                    };
+                    const cfg2 = {
+                        type: 'line',
+                        data: data2,
+                    };
+                    new Chart(ctx2, cfg2)
+                }
+            })
+
+        }
+
+        @* Fetch Revenue in day range *@
+
+        function fetchRevenueInDayRange(date) {
+                let currentDate = new Date().toJSON();
+                let barStatus = Chart.getChart("barChart2");
+                if (barStatus != undefined) {
+                    barStatus.destroy();
+
+                }
+                let lineStatus = Chart.getChart("lineChart2");
+                if (lineStatus != undefined) {
+                    lineStatus.destroy();
+
+                }
+                let pickDate = new Date(date).toJSON();
+                $.ajax({
+                    url: "/Dashboard_63132986/getRevenueInRange?startDate=" + pickDate + "&endDate=" + currentDate,
+                    method: "GET",
+                    dataType: "JSON",
+                    beforeSend: function () {
+                        $(".loading-3").show();
+                        $(".date-input").prop("disabled", true);
+                    },
+                    success: function (response) {
+                        $(".loading-3").hide();
+                        $(".date-input").prop("disabled", false);
+                        console.log(response.data);
+                        const originData = response.data;
+                        let typeName = [];
+                        let typeCount = [];
+                        originData.forEach(function (e) {
+                            typeName.push.apply(typeName, Object.keys(e));
+                            typeCount.push.apply(typeCount, Object.values(e));
+                        })
+
+                        // --------------------Bar chart-------------------------
+                        const ctx1 = document.getElementById("barChart2");
+                        const data1 = {
+                            labels: typeName,
+                            datasets: [{
+                                label: 'Booked room amount',
+                                data: typeCount,
+                                hoverOffset: 4,
+                                backgroundColor: [
+                                    'rgba(75, 192, 192)',
+                                    'rgba(255, 99, 132)',
+                                    'rgba(255, 159, 64)',
+                                    'rgba(255, 205, 86)',
+                                    'rgba(54, 162, 235)',
+                                    'rgba(153, 102, 255)',
+                                    'rgba(201, 203, 207)'
+                                ],
+                            }]
+                        };
+                        const cfg1 = {
+                            type: 'bar',
+                            data: data1,
+                        };
+                        new Chart(ctx1, cfg1)
+                        // --------------------Line chart-------------------------
+                        const ctx2 = document.getElementById("lineChart2");
+                        const data2 = {
+                            labels: typeName,
+                            datasets: [{
+                                label: 'Revenue',
+                                data: typeCount,
+                                fill: false,
+                                borderColor: 'rgba(14, 103, 207)',
+
+                                tension: 0.1
+                            }]
+                        };
+                        const cfg2 = {
+                            type: 'line',
+                            data: data2,
+                        };
+                        new Chart(ctx2, cfg2)
+                    }
+                })
+
+            }
+        @* ------------------------------------- Statistic helper-------------------------------------*@
+
+
+        @* ------------------------------------- Render Script-------------------------------------*@
+        function init() {
+            var date = new Date();
+            var currentDate = date.toISOString().substring(0, 10);
+
+            $(".date-input").val(currentDate);
+            console.log($(".date-input").val());
+
+            @* Fetch booked room number in one day *@
+            fetchBookedRoomNumber(currentDate);
+            @* Fetch booked room number in day range *@
+            fetchBookedRoomNumberInDayRange(currentDate);
+            @* Fetch Revenue in day range *@
+            fetchRevenueInDayRange(currentDate);
+
+        }
+        $(document).ready(function () {
+            init();
+            @* Fetch booked room number in one day *@
+            $(".booked_room_date").on("change", function () {
+                fetchBookedRoomNumber($(this).val());
+            })
+            @* Fetch booked room number in day range *@
+            $(".booked_date_from").on("change", function () {
+                fetchBookedRoomNumberInDayRange($(this).val());
+            })
+            @* Fetch Revenue in day range *@
+            $(".revenue_date_from").on("change", function () {
+                fetchRevenueInDayRange($(this).val());
+            })
+        })
+        @* ------------------------------------- Render Script-------------------------------------*@
+    </script>
+}

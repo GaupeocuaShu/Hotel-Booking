@@ -1,0 +1,721 @@
+﻿@using Project_63132986.Models
+@model dynamic
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_FrontendLayout.cshtml";
+    string username = "";
+    if (Session["username"] != null) { username = Session["username"].ToString(); }
+
+}
+
+<!--header-->
+<div class="swiper mySwiper header">
+    <div class="header_top">
+        <div class="site_name">
+            <span>ST RUNCH HOTEL</span>
+        </div>
+
+        <div class="site_nav d-flex ">
+            @if (Session["userID"] != null)
+            {
+
+                <div class="mr-3 avatar" style="cursor:pointer ">
+                    <i style="font-size:20px" class="fa-regular fa-circle-user"></i>
+                    <div class="info">
+                        <p>Username: @username</p>
+                        @if (Session["role"].ToString() != "Admin")
+                        {
+                            <p>
+                                Booked Room:
+                                <a href="/Frontend_63132986/FrontendBookedRoom">Click Here</a>
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                Dashboard:
+                                <a href="/Dashboard_63132986/Index">Click Here</a>
+                            </p>
+                        }
+                    </div>
+                </div>
+
+            }
+            <span id="nav_bar">MENU<i class="bi bi-list"></i></span>
+        </div>
+    </div>
+
+    <div class="swiper-wrapper">
+        @foreach (var banner in Model.Banners)
+        {
+            <div class="swiper-slide header_bottom flex" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)), url('/assets/images/@banner.BannerImage');
+                background-position: center; background-size: cover ;">
+                <h2>@banner.Title</h2>
+                <p>
+                    @banner.Content
+                </p>
+                <button type="button" class="head_btn">Welcome to Us</button>
+            </div>
+        }
+
+
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+
+
+<!--end header-->
+<!--side navbar-->
+<div class="sidenav" id="sidenav">
+    <span class="cancel_btn" id="cancel_btn">
+        <i class="bi bi-x-lg"></i>
+    </span>
+    <ul class="mynavbar">
+        <li><a href="#header">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#rooms">Rooms</a></li>
+        <li><a href="#customers">Customers</a></li>
+    </ul>
+    @if (Session["userID"] == null)
+    {
+        <a href="/Login_63132986/Login" class="btn log_in text-center">Log in</a>
+        <a href="/Login_63132986/Signup" class="btn log_in text-center">Sign up</a>
+    }
+    else
+    {
+        <a href="/Login_63132986/Logout" class="btn log_in text-center">Log out</a>
+    }
+
+
+</div>
+<!--end side navbar-->
+<!--full screen modal-->
+<div class="modal"></div>
+<!--end full screen modal-->
+<!--content-->
+<section class="services sec-width" id="services">
+    <div class="title">
+        <h2>services</h2>
+    </div>
+    <div class="services_container">
+        @foreach (var service in Model.Services)
+        {
+            <!--single service-->
+            <article class="service">
+                <div class="service_icons">
+                    <span><i class="@service.ServiceIcon"></i></span>
+                </div>
+                <div class="service_content">
+                    <h2>@service.ServiceName</h2>
+                    <p>
+
+                        @Html.Raw(service.ServiceDescription)
+                    </p>
+                    <button type="button" class="btn">Learn more</button>
+                </div>
+            </article>
+            <!--end of single service-->
+        }
+
+    </div>
+</section>
+
+<section class="rooms sec-width" id="rooms">
+    <div class="title">
+        <h2>Rooms</h2>
+    </div>
+    <div class="rooms_container">
+        <!-- single room -->
+        @foreach (Room room in Model.Rooms)
+        {
+            <article class="room">
+                <div class="swiper swiper_2 swiper_container">
+                    <div class="swiper-wrapper">
+                        @foreach (var roomImage in room.RoomImageGalleries)
+                        {
+                            <div class="swiper-slide room_image">
+                                <img src="~/assets/images/@roomImage.RoomImage" height="519px" />
+                            </div>
+                        }
+
+                    </div>
+                    <div class="swiper-pagination"></div>
+
+                </div>
+                <div class="swiper_text">
+                    <div class="room_text" style="position:relative">
+                        <div class="booked_room booked_room-@room.ID">
+                            <div class="subscribe">
+                                <div class="d-flex">
+                                    <div>
+                                        <button class="reset-btn btn-sm btn-primary">Reset day</button>
+                                    </div>
+                                    <div class="cancel-btn" data-id="@room.ID">X</div>
+                                </div>
+                                <p>Booking Information</p>
+                                <form class="book_form-@room.ID">
+                                    @Html.AntiForgeryToken()
+
+                                    @*----------------------------------- Hidden Input -----------------------------*@
+                                    <div class="input_default">
+                                        <input type="hidden" name="RoomID" class="room-@room.ID" />
+                                        <input type="hidden" name="CheckinType" value="0" />
+                                        <input type="hidden" name="UserID" value="@Session["userID"]" />
+                                        <input type="hidden" name="BookDate" class="book_date book_date-@room.ID" />
+                                        <input type="hidden" name="PaymentStatus" value="0" />
+                                        <input type="hidden" name="CheckinStatus" value="0" />
+                                        <input type="hidden" name="BookingStatus" value="Success" />
+                                        <input type="hidden" class="total_price_submit-@room.ID" name="TotalPrice" />
+                                        <input type="hidden" class="total_bookedday_submit total_bookedday_submit-@room.ID" name="TotalBookedDay" />
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label>Type:</label>
+                                            <input readonly disabled type="text" value="@room.RoomType.RoomTypeName" class="form-control" />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Room Name:</label>
+                                            <input readonly disabled type="text" value="@room.RoomName" class="room-name-@room.ID form-control" />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Price (Per one night):</label>
+                                            <input readonly disabled type="text" value="@room.RoomType.Price.ToString("G29")$" class="room_price room_price-@room.ID form-control" />
+                                        </div>
+                                    </div>
+                                    @*----------------------------------- Hidden Input -----------------------------*@
+
+                                    @*----------------------------------- Select Input -----------------------------*@
+
+                                    <div class="input_select">
+                                        <div class="form-group">
+                                            <label>Check-in Day:</label>
+                                            <input data-roomtypeid="@room.RoomTypeID" data-id="@room.ID" 
+                                                   name="CheckinDay" type="date" class="check_in_day check_in_day-@room.ID form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Check-out Day:</label>
+                                            <input data-roomtypeid="@room.RoomTypeID" data-id="@room.ID" 
+                                                   name="CheckoutDay" type="date" class="check_out_day check_out_day-@room.ID form-control" />
+                                        </div>
+                                        <div class="text-center"><span class="loading"></span></div>
+                                        <div class="room_alert room_alert-@room.ID"> Sorry At this time, the room is not available! <br /> Please choose another time :(</div>
+
+                                        <div>
+                                            <label>Enjoy Our Services:</label> <br />
+                                            <code>
+                                                (All our services will be charged for once
+                                                and it will be applied for all your booked days)
+                                            </code>
+                                            @foreach (HotelService service in Model.Services)
+                                            {
+                                                <div class="form-group">
+                                                    <label>@service.ServiceName - @service.Price.ToString("G29")$</label>&emsp;
+                                                    <input name="ServiceID[]" data-id="@room.ID" data-price="@service.Price.ToString("G29")" 
+                                                           type="checkbox" class="hotel_service hotel_service-@room.ID" value="@service.ID" />
+
+                                                </div>
+                                            }
+
+                                        </div>
+                                        <hr />
+                                        <div class="d-flex  justify-content-between">
+                                            <div>
+                                                Total day: <span class="total_day total_day-@room.ID">1</span><br />
+                                                Total: <span class="total_price total_price-@room.ID">@room.RoomType.Price.ToString("G29")</span>$
+                                            </div>
+                                            <div class="form-group">
+                                                <select class="form-control">
+                                                    <option>Pay Now</option>
+                                                    <option>Pay when Check-in</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <button data-id="@room.ID" class="btn btn-default submit_book_form">Book</button>
+                                    </div>
+                                    @*----------------------------------- Select Input -----------------------------*@
+
+                                </form>
+                                <br>
+
+                            </div>
+                        </div>
+                        <div class="desciption">
+                            <h3>@room.RoomType.RoomTypeName</h3>
+                            <ul>
+                                <li>
+
+                                    @Html.Raw(@room.RoomFeature)
+                                </li>
+
+                                <li>
+                                    @Html.Raw(@room.RoomDescription)
+                                </li>
+                                <li class="rating">
+                                    <span>@room.RoomType.Price.ToString("G29")$ /</span> Per Night
+                                </li>
+                                <button data-id="@room.ID" type="button" class="btn book-btn">book now</button>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="customers" id="customers" style="background-image: url('/assets/images/customer.jpeg')">
+    <div class="sec-width">
+        <div class="title">
+            <h2>Customers</h2>
+        </div>
+        <div class="customer_container" >
+            <!-- single customer -->
+            <div class="customer">
+                <div class="rate">
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-regular fa-star-half-stroke"></i></span>
+                </div>
+                <h3>We Loved it</h3>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Quae cum officia, aliquid aut, incidunt tempore
+                    ducimus doloribus unde accusamus facilis assumenda harum,
+                    iste nobis. Natus iure officiis sint recusandae sapiente.
+                </p>
+                <img src="~/assets/images/cus_1.jpeg" />
+                <span>John & Nicole Jess, USA</span>
+            </div>
+            <!-- end of single customer -->
+            <!-- single customer -->
+            <div class="customer">
+                <div class="rate">
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-solid fa-star"></i></span>
+                    <span><i class="fa-regular fa-star"></i></span>
+                </div>
+                <h3>Everything is good, the staff are very helpful!</h3>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Quae cum officia, aliquid aut, incidunt tempore
+                    ducimus doloribus unde accusamus facilis assumenda harum,
+                    iste nobis. Natus iure officiis sint recusandae sapiente.
+                </p>
+                <img src="~/assets/images/cus_2.jpeg" />
+                <span>Alesscia, Australia</span>
+            </div>
+            <!-- end of single customer -->
+            <!-- single customer -->
+            
+        <div class="customer" >
+            <div class="rate">
+                <span><i class="fa-solid fa-star"></i></span>
+                <span><i class="fa-solid fa-star"></i></span>
+                <span><i class="fa-solid fa-star"></i></span>
+                <span><i class="fa-solid fa-star"></i></span>
+                <span><i class="fa-regular fa-star"></i></span>
+            </div>
+            <h3>Clean, beautiful room and nice place</h3>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Quae cum officia, aliquid aut, incidunt tempore
+                ducimus doloribus unde accusamus facilis assumenda harum,
+                iste nobis. Natus iure officiis sint recusandae sapiente.
+            </p>
+            <img src="~/assets/images/cus_3.jpeg" />
+            <span>Lucas & Gabriel, Belgium</span>
+        </div>
+            <!-- end of single customer -->
+        </div>
+    </div>
+</section>
+<!-- end of body content -->
+<!-- footer -->
+<footer class="footer">
+    <div class="footer_container">
+        <div>
+            <h2>About Us</h2>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Laudantium iusto nam quo corrupti, excepturi et eveniet nobis
+                ducimus ipsum quia? Veniam minus quo ut exercitationem iusto
+                voluptas dignissimos id sint?
+            </p>
+            <ul class="social_app">
+                <li><i class="fa-brands fa-twitter"></i></li>
+                <li><i class="fa-brands fa-facebook"></i></li>
+                <li><i class="fa-brands fa-square-instagram"></i></li>
+                <li><i class="fa-brands fa-linkedin"></i></li>
+            </ul>
+        </div>
+        <div>
+            <h2>Useful Links</h2>
+            <a href="">Blogs</a>
+            <a href="">Rooms</a>
+            <a href="">Subscription</a>
+            <a href="">Gift card</a>
+        </div>
+        <div>
+            <h2>Privacy</h2>
+            <a href="">Career</a>
+            <a href="">About Us</a>
+            <a href="">Contact Us</a>
+            <a href="">Services</a>
+        </div>
+        <div>
+            <h2>Have A Question ?</h2>
+            <div class="contact_item">
+                <span>
+                    <i class="fa-solid fa-location-dot"></i>
+                </span>
+                <span>
+                    15 Tran Phu, Nha Trang, Khanh Hoa, VN
+                </span>
+            </div>
+            <div class="contact_item">
+                <span>
+                    <i class="fa-solid fa-phone"></i>
+                </span>
+                <span>
+                    0258.3124.567
+                </span>
+            </div>
+            <div class="contact_item">
+                <span>
+                    <i class="bi bi-envelope-at-fill"></i>
+                </span>
+                <span>
+                    strunchhotelspa15@gmail.com
+                </span>
+            </div>
+        </div>
+    </div>
+</footer>
+<!---- end of footer ---->
+@section scripts{
+
+
+    <script>
+
+
+
+        $(document).ready(function () {
+
+
+            @* ------------------------------------- Swiper -------------------------------------*@
+
+
+
+        var swiper = new Swiper(".mySwiper", {
+            spaceBetween: 30,
+            centeredSlides: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+
+        });
+        var swiper = new Swiper(".swiper_2", {
+            spaceBetween: 30,
+            centeredSlides: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+
+
+        });
+
+
+
+
+
+            @* ------------------------------------- LOGIC FUNCTION-------------------------------------*@
+
+            function Init() {
+
+                const day = new Date();
+                const today = day.toISOString().slice(0, 10);
+
+                console.log(today);
+
+                $(".room_alert").hide();
+
+                $(".check_in_day").attr("min", today);
+                $(".check_in_day").removeAttr("max");
+                $(".check_out_day").attr("disabled", true);
+                $(".check_out_day").val(" ");
+                $(".check_in_day").val(today);
+                $(".book_date").val(today);
+
+                $(".hotel_service").each(function (index, value) {
+                    $(value).prop("checked", false);
+                    $(value).attr("disabled", true);
+                });
+                $(".submit_book_form").prop("disabled", true);
+            }
+            function setLimitCheckInDay(id, day) {
+                const day1 = new Date(day);
+                const day2 = new Date(day);
+                day2.setDate(day1.getDate() - 1);
+                const prevDay = day2.toISOString().slice(0, 10);
+                $(".check_in_day-" + id).attr("max", prevDay);
+            }
+            function setLimitCheckOutDay(id,day) {
+                const day1 = new Date(day);
+                const day2 = new Date(day);
+                day2.setDate(day1.getDate() + 1);
+                const nextDay = day2.toISOString().slice(0, 10);
+
+                $(".check_out_day-"+id).attr("disabled", false);
+                $(".check_out_day-"+id).attr("min", nextDay);
+            }
+
+            function calculateBookedDays(id) {
+                const checkInDay = new Date($(".check_in_day-"+id).val());
+                const checkOutDay = new Date($(".check_out_day-"+id).val());
+                let Difference_In_Time = checkOutDay.getTime() - checkInDay.getTime();
+                let bookedDays = Math.round(Difference_In_Time / (1000 * 3600 * 24));
+                $(".total_bookedday_submit-"+id).val(bookedDays);
+
+                return bookedDays;
+            }
+
+            function calculateServiceTotalPrice(id) {
+                let price = 0;
+                $(".hotel_service-"+id).each(function (index, value) {
+                    if ($(value).prop("checked") == true) {
+                        price += parseInt($(value).data("price"));
+
+                    }
+                });
+                return price;
+            }
+            function setTotal(id,bookedDays, servicesTotalPrice) {
+                const roomPrice = $(".room_price-"+id).val();
+                let total = parseInt(roomPrice) * bookedDays + servicesTotalPrice;
+                $(".total_price-"+id).html(total);
+                $(".total_price_submit-"+id).val(total);
+            }
+            function setDays(id,bookedDays) {
+                $(".total_day-"+id).html(bookedDays);
+            }
+
+            function hasAvailableRoom(roomID,roomTypeID, checkInDay, checkOutDay) {
+                let flag;
+                $.ajax({
+                    method: "GET",
+                    dataType: "JSON",
+                    url: "/BookedRooms_63132986/hasAvailableRoom?RoomTypeID=" + roomTypeID + "&checkIn=" + checkInDay + "&checkOut=" + checkOutDay,
+                    async:false,
+                    beforeSend: function () {
+                        $(".loading").html('<i class="fas fa-spinner fa-spin"></i>');
+                    },
+
+                    success: function (response) {
+                        $(".loading").html(" ");
+
+                        if (response.status == "success") {
+                            $(".room_alert-" + roomID).removeClass('room_alert_danger');
+                            $(".room_alert-" + roomID).addClass('room_alert_success');
+                            $(".room-" + roomID).val(response.roomID);
+                            $(".room-name-" + roomID).val(response.roomName)
+                            flag = true;
+                        }
+                        else {
+                            Init();
+                            $(".room_alert-" + roomID).removeClass('room_alert_success');
+                            $(".room_alert-" + roomID).addClass('room_alert_danger');
+                            flag = false;
+                            $(".room-name-" + roomID).val(response.roomName)
+                        }
+
+                        $(".room_alert-" + roomID).show().html(response.message);
+                    }
+                })
+                console.log(flag);
+                return flag;
+            }
+            //Find Available Room
+            function findAvailableRoom(id, roomTypeID) {
+                let day1 = $('.check_in_day-' + id).val();
+                let day2 = $('.check_out_day-' + id).val();
+                const checkInDay = new Date(day1).toJSON();
+                const checkOutnDay = new Date(day2).toJSON();
+                if (hasAvailableRoom(id, roomTypeID, checkInDay, checkOutnDay) == true) {
+                    const bookedDays = calculateBookedDays(id);
+                    const servicePrice = calculateServiceTotalPrice(id);
+                    setTotal(id, bookedDays, servicePrice);
+                    setDays(id, bookedDays);
+                    $(".hotel_service-" + id).each(function (index, value) {
+                        $(value).attr("disabled", false);
+                    });
+                    $(".submit_book_form").prop("disabled", false);
+
+                }
+                else {
+                    $(".hotel_service-" + id).each(function (index, value) {
+                        $(value).attr("disabled", true);
+                    });
+                    $(".submit_book_form").prop("disabled", true);
+
+                }
+            }
+           
+            @*------------------------------------- END FUNCTION -------------------------------------*@
+
+            Init();
+
+
+            $(".reset-btn").click(function () {
+                Init();
+            });
+        
+            // when check in day input change
+            $(".check_in_day").on("change", function () {
+                const id = $(this).data("id");
+                const checkOutDay = $(".check_out_day-" + id).val();
+                // check out day input is not null
+                if (checkOutDay) {
+                    const roomTypeID = $(this).data('roomtypeid');
+                    // Find Available Room
+                    findAvailableRoom(id, roomTypeID);
+                };
+
+                setLimitCheckOutDay(id,$(this).val());
+            })
+
+            // when check in day input change
+            $(".check_out_day").on("change", function () {
+                const id = $(this).data('id');
+                const roomTypeID = $(this).data('roomtypeid');
+                // Find Available Room
+                findAvailableRoom(id, roomTypeID);
+                setLimitCheckInDay(id, $(this).val())
+            })
+
+
+            $(".hotel_service").on("click", function () {
+                const id = $(this).data('id');
+                const bookedDays = calculateBookedDays(id);
+                const servicePrice = calculateServiceTotalPrice(id);
+                setTotal(id,bookedDays, servicePrice);
+            })
+
+            $(".submit_book_form").on("click", function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    showClass: {
+                        popup: `
+                          animate__animated
+                          animate__fadeInLeftBig
+                          animate__faster
+                        `
+                    },
+                    hideClass: {
+                        popup: `
+                          animate__animated
+                          animate__fadeOutRight
+                          animate__faster
+                        `
+                    },
+                    title: "Please read our term",
+                    html: `
+                        <ul >
+                            <li>You would not be refunded if you cancel the room</li>
+                            <li>The room will be automatically cancelled if you are late more
+                            than 30 minutes prior to check-in time</li>
+                        </ul>
+                    `,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Go to book !"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        const id = $(this).data("id");
+                        const formData = $(".book_form-" + id).serialize();
+
+                        $.ajax({
+                            method: "POST",
+                            data: formData,
+                            url: "/BookedRooms_63132986/Create",
+                            dataType: "JSON",
+                            beforeSend: function () {
+                                $(".submit_book_form").html(`<i class="fas fa-spinner fa-spin"></i>`)
+                            },
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            success: function (response) {
+                                if (response.status == 'unsuccess') {
+                                    window.location.href = response.navigation;
+                                }
+                                else {
+                                    $(".submit_book_form").html(`Book`)
+                                    Swal.fire({
+                                        showClass: {
+                                            popup: `
+                                              animate__animated
+                                              animate__fadeInLeftBig
+                                              animate__faster
+                                            `
+                                        },
+                                        hideClass: {
+                                            popup: `
+                                          animate__animated
+                                          animate__fadeOutRight
+                                          animate__faster
+                                        `
+                                        },
+                                        title: "Booked successfully!",
+                                        text: "Your room has been booked.",
+                                        html: `<br>Please click the link below to see your booked room and details
+                                        <br> <a href="/Frontend_63132986/FrontendBookedRoom">Go To Booked Room</a>`,
+                                        icon: "success",
+                                    });
+                                    Init();
+                                }
+                            }
+                        })
+                    }
+                });
+
+            })
+
+            $(".book-btn").click(function () {
+                const id = $(this).data("id");
+                $(".booked_room").each((index, value) => {
+                    if ($(value).is(':visible') == true) {
+                        $(value).slideToggle('slow');
+                        console.log($(value).is(':visible'));
+                    }
+                })
+
+                $(".booked_room-" + id).slideToggle("slow");
+            });
+
+            $(".cancel-btn").click(function () {
+                const id = $(this).data("id");
+                $(".booked_room-" + id).slideToggle("slow");
+            });
+
+        })
+
+    </script>
+}

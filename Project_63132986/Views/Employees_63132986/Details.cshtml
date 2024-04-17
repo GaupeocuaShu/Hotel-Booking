@@ -1,0 +1,122 @@
+﻿@model Project_63132986.Models.Employee
+
+@{
+    ViewBag.Title = "Employees";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string sex = "Male";
+    if (Model.Sex == false)
+    {
+        sex = "Female";
+    }
+}
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Employees </h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item"><a href="#">Forms</a></div>
+                <div class="breadcrumb-item">Employees </div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Employees Detail Information</h2>
+            <p class="section-lead">We provide advanced input fields, such as date picker, color picker, and so on.</p>
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+
+                        <div class="card-body">
+                            <h4>Employee #@Html.DisplayFor(model => model.ID)</h4>
+                            <div class="d-flex flex-wrap align-items-center gap-5">
+                                <div>
+                                    <img class="rounded-3" width="300" src="~/assets/images/@Html.DisplayFor(model => model.Avatar)" />
+                                </div>
+                                <div class="fs-5">
+                                    <div>
+                                        <div class="fw-bold">
+                                            @Html.DisplayNameFor(model => model.EmployeeName):
+                                        </div>
+
+                                        <div>
+                                            @Html.DisplayFor(model => model.EmployeeName)
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="fw-bold ">
+                                            @Html.DisplayNameFor(model => model.DateOfBirth):
+                                        </div>
+
+                                        <div>
+                                            @Html.DisplayFor(model => model.DateOfBirth):
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="fw-bold ">
+                                            @Html.DisplayNameFor(model => model.Email):
+                                        </div>
+
+                                        <div>
+                                            @Html.DisplayFor(model => model.Email)
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="fw-bold ">
+                                            @Html.DisplayNameFor(model => model.PhoneNumber):
+                                        </div>
+
+                                        <div>
+                                            @Html.DisplayFor(model => model.PhoneNumber)
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="fw-bold ">
+                                            @Html.DisplayNameFor(model => model.Sex):
+                                        </div>
+
+                                        <div>
+                                            @sex
+                                        </div>
+
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold ">
+                                            @Html.DisplayNameFor(model => model.EmployeeAddress):
+                                        </div>
+
+                                        <div>
+                                            @Html.DisplayFor(model => model.EmployeeAddress)
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold ">
+                                            @Html.DisplayNameFor(model => model.Position.PositionName):
+                                        </div>
+
+                                        <div>
+                                            @Html.DisplayFor(model => model.Position.PositionName)
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <hr style="opacity:0.1"/>
+                            <div class="mt-5">
+                                <a href="/Employees_63132986/Index" style="width:70px" class="text-white btn btn-danger"><i class="bi bi-escape"></i></a>
+                                &emsp;<a href="/Employees_63132986/Edit/@Model.ID" style="width:70px" class="text-white btn btn-primary"><i class='bi bi-pencil-square'></i></a>
+                            </div>
+                        </div>
+           
+                    </div>
+                </div>
+                </div>
+
+        </div>
+    </section>
+</div>
